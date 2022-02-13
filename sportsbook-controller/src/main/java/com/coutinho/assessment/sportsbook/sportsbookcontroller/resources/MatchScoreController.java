@@ -21,8 +21,8 @@ public class MatchScoreController {
 
     @Async("asyncExecutor")
     @PostMapping
-    public CompletableFuture<MatchEventDTO> createEvent(String name){
-        return CompletableFuture.completedFuture(service.createEvent(name));
+    public CompletableFuture<MatchEventDTO> createEvent(MatchEventDTO dto){
+        return CompletableFuture.completedFuture(service.createEvent(dto));
     }
 
     @Async("asyncExecutor")

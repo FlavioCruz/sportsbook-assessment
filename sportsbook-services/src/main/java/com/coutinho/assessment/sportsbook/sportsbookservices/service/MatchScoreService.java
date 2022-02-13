@@ -4,7 +4,7 @@ import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventD
 
 public interface MatchScoreService {
 
-    MatchEventDTO createEvent(String name);
+    MatchEventDTO createEvent(MatchEventDTO dto);
     MatchEventDTO updateEvent();
     MatchEventDTO listEvent();
 }

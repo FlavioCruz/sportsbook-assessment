@@ -5,12 +5,12 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>sportsbook-models</module>
+		<module>sportsbook-datatransfer</module>
+		<module>sportsbook-data-stream</module>
+		<module>sportsbook-data-mongo</module>
+		<module>sportsbook-data-kafka</module>
 		<module>sportsbook-services</module>
 		<module>sportsbook-controller</module>
-		<module>sportsbook-datatransfer</module>
-		<module>sportsbook-data-mongo</module>
-		<module>sportsbook-data-stream</module>
-		<module>sportsbook-data-kafka</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -52,13 +52,6 @@
 			<groupId>org.mapstruct</groupId>
 			<artifactId>mapstruct</artifactId>
 			<version>${org.mapstruct.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<!--internal-->
-		<dependency>
-			<groupId>com.coutinho.assessment</groupId>
-			<artifactId>sportsbook-datatransfer</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
 		<!--Testing-->

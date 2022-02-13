@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import java.util.concurrent.ExecutionException;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -32,9 +33,9 @@ public class MatchScoreControllerTest {
         match.setEvent(name);
         String result;
         synchronized (service){
-            Mockito.when(this.service.createEvent(anyString())).thenReturn(match);
-            assertNotNull(this.controller.createEvent(name).get());
-            result = this.controller.createEvent(name).get().getEvent();
+            Mockito.when(this.service.createEvent(any(MatchEventDTO.class))).thenReturn(match);
+            assertNotNull(this.controller.createEvent(new MatchEventDTO()).get());
+            result = this.controller.createEvent(new MatchEventDTO()).get().getEvent();
         }
         assertEquals(result, expected);
     }
