@@ -19,7 +19,7 @@
     <dependencies>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-services</artifactId>
+            <artifactId>sportsbook-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
@@ -36,7 +36,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                    <mainClass>com.coutinho.assessment.sportsbook.sportsbookcontroller.resources.SportsbookApplication</mainClass>
+                </configuration>
             </plugin>
+
         </plugins>
     </build>
+
 </project>

@@ -31,6 +31,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <skip>true</skip>
+                    <mainClass>com.coutinho.assessment.sportsbook.sportsbookcontroller.resources.SportsbookApplication</mainClass>
                 </configuration>
             </plugin>
 

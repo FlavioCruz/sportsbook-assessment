@@ -9,15 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sportsbook-data-mongo</artifactId>
-    <dependencies>
-        <dependency>
-            <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-models</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
+    <artifactId>sportsbook-model</artifactId>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -34,9 +26,7 @@
                     <mainClass>com.coutinho.assessment.sportsbook.sportsbookcontroller.resources.SportsbookApplication</mainClass>
                 </configuration>
             </plugin>
-
         </plugins>
     </build>
-
 
 </project>
