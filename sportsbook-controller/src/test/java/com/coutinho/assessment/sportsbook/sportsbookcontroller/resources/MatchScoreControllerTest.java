@@ -30,13 +30,11 @@ public class MatchScoreControllerTest {
     @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "randomData")
     public void testCreateEvent(MatchEventDTO matchEventDTO, String expected) throws ExecutionException, InterruptedException {
 
-        synchronized (service){
+        synchronized (service) {
             Mockito.when(this.service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(matchEventDTO);
 
             assertNotNull(this.controller.insertEvent(new MatchEventDTO()).get());
-            //result = this.controller.insertEvent(new MatchEventDTO()).get().getEvent();
         }
-        //assertEquals(result, expected);
     }
 
     @Test

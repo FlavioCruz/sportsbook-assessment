@@ -12,7 +12,6 @@ import static com.mongodb.client.model.Filters.eq;
 @Repository
 public class MatchEventDataMongo implements MatchEventDataSource {
 
-    //private final MongoDatabase database;
     private final ReactiveMongoTemplate template;
 
     public MatchEventDataMongo(ReactiveMongoTemplate template) {
