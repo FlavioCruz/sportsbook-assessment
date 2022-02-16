@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-models</artifactId>
+            <artifactId>sportsbook-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

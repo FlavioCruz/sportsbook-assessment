@@ -8,10 +8,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.time.Instant;
 import java.util.concurrent.ExecutionException;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
@@ -28,16 +28,15 @@ public class MatchScoreControllerTest {
     }
 
     @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "randomData")
-    public void testCreateEvent(String name, String expected) throws ExecutionException, InterruptedException {
-        MatchEventDTO match = new MatchEventDTO();
-        match.setEvent(name);
-        String result;
+    public void testCreateEvent(MatchEventDTO matchEventDTO, String expected) throws ExecutionException, InterruptedException {
+
         synchronized (service){
-            Mockito.when(this.service.createEvent(any(MatchEventDTO.class))).thenReturn(match);
-            assertNotNull(this.controller.createEvent(new MatchEventDTO()).get());
-            result = this.controller.createEvent(new MatchEventDTO()).get().getEvent();
+            Mockito.when(this.service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(matchEventDTO);
+
+            assertNotNull(this.controller.insertEvent(new MatchEventDTO()).get());
+            //result = this.controller.insertEvent(new MatchEventDTO()).get().getEvent();
         }
-        assertEquals(result, expected);
+        //assertEquals(result, expected);
     }
 
     @Test
@@ -52,16 +51,24 @@ public class MatchScoreControllerTest {
     @DataProvider(parallel = true)
     public Object[][] randomData(){
         return new Object[][]{
-                {"Ana", "Ana"},
-                {"Bruno", "Bruno"},
-                {"Caio", "Caio"},
-                {"Daniel", "Daniel"},
-                {"Ester", "Ester"},
-                {"Flavio", "Flavio"},
-                {"Gilda", "Gilda"},
-                {"Heitor", "Heitor"},
-                {"Italo", "Italo"},
-                {"Jessica", "Jessica"}
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 0"), "0 - 0"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 3"), "0 - 3"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 2"), "0 - 3"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 5"), "Daniel"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 1"), "Ester"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 7"), "Flavio"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 1"), "Gilda"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "1 - 0"), "Heitor"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "1 - 7"), "Italo"},
+                {generateMatchEventsDto("Flamengo vs Fluminense", "0 - 0"), "Jessica"}
         };
+    }
+
+    private MatchEventDTO generateMatchEventsDto(String eventName, String eventScore){
+        MatchEventDTO dto = new MatchEventDTO();
+        dto.setEvent(eventName);
+        dto.setScore(eventScore);
+
+        return dto;
     }
 }

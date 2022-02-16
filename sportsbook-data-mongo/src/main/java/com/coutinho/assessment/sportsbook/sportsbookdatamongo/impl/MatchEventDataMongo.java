@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
-
 import static com.mongodb.client.model.Filters.eq;
 
 @Repository
@@ -22,47 +20,23 @@ public class MatchEventDataMongo implements MatchEventDataSource {
     }
 
     @Override
+    public Mono<MatchEvent> getEventByName(String entityId) {
+        return template.findById(entityId, MatchEvent.class);
+    }
+
+    @Override
     public Flux<MatchEvent> listMatches() {
         return template.findAll(MatchEvent.class);
     }
 
     @Override
-    public Mono<MatchEvent> createOne(MatchEvent matchEvent) {
-        return template.save(Mono.just(matchEvent));
-    }
+    public Mono<MatchEvent> createOrUpdateOne(MatchEvent matchEvent) {
+        MatchEvent currEvent = template.findById(matchEvent.getId(), MatchEvent.class)
+                .blockOptional().orElse(null);
 
-    @Override
-    public Mono<List<List<MatchEvent>>> createMany(List<MatchEvent> matchEventList) {
-        synchronized (template){
-            return Flux.just(matchEventList).flatMap(template::insert).collectList();
+        if(currEvent == null || currEvent.getRequestReceived().isBefore(matchEvent.getRequestReceived())){
+            return template.save(Mono.just(matchEvent));
         }
-    }
-
-    @Override
-    public MatchEvent updateOne(MatchEvent matchEvent) {
-        //template.updateOne(eq("i", 10), new Document("$set", new Document("i", 110)))
-        //        .subscribe(new Subscriber<UpdateResult>() {
-        //            @Override
-        //            public void onSubscribe(Subscription subscription) {
-//
-        //            }
-//
-        //            @Override
-        //            public void onNext(UpdateResult updateResult) {
-//
-        //            }
-//
-        //            @Override
-        //            public void onError(Throwable throwable) {
-//
-        //            }
-//
-        //            @Override
-        //            public void onComplete() {
-//
-        //            }
-        //        });
-
-        return matchEvent;
+        return Mono.just(currEvent);
     }
 }

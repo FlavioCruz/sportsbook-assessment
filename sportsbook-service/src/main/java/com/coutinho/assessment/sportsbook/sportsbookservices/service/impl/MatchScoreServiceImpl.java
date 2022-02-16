@@ -1,6 +1,5 @@
 package com.coutinho.assessment.sportsbook.sportsbookservices.service.impl;
 
-
 import com.coutinho.assessment.sportsbook.sportsbookdatamongo.MatchEventDataSource;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.mapper.MatchScoreMapper;
@@ -9,6 +8,7 @@ import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreS
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,16 +22,18 @@ public class MatchScoreServiceImpl implements MatchScoreService {
     }
 
     @Override
-    public MatchEventDTO createEvent(MatchEventDTO dto) {
-
-        MatchEvent matchEvent = MatchScoreMapper.INSTANCE.dtoToEntity(dto);
-        MatchEvent insertResult = dataSource.createOne(matchEvent).blockOptional().orElseThrow();
-        return MatchScoreMapper.INSTANCE.entityToDto(insertResult);
+    public MatchEventDTO getEventByName(String eventName) {
+        MatchEvent resultEntity = dataSource.getEventByName(eventName).blockOptional().orElseThrow();
+        return MatchScoreMapper.INSTANCE.entityToDto(resultEntity);
     }
 
     @Override
-    public MatchEventDTO updateEvent() {
-        return null;
+    public MatchEventDTO createOrUpdateEvent(MatchEventDTO dto, Instant requestReceived) {
+
+        MatchEvent matchEvent = MatchScoreMapper.INSTANCE.dtoToEntity(dto);
+        matchEvent.setRequestReceived(requestReceived);
+        MatchEvent insertResult = dataSource.createOrUpdateOne(matchEvent).blockOptional().orElseThrow();
+        return MatchScoreMapper.INSTANCE.entityToDto(insertResult);
     }
 
     @Override
