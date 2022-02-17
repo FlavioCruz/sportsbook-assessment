@@ -1,5 +1,6 @@
 package com.coutinho.assessment.sportsbook.sportsbookcontroller.resources;
 
+import com.coutinho.assessment.sportsbook.sportsbookcontroller.controller.MatchScoreController;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
 import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
 import org.mockito.Mock;

@@ -18,9 +18,9 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableReactiveMongoRepositories
 public class DbConfiguration extends AbstractReactiveMongoConfiguration {
 
-    @Value("mongo.data.server.database")
+    @Value("${mongo.data.server.database}")
     private String databaseName;
-    @Value("mongo.data.server.collection")
+    @Value("${mongo.data.server.collection}")
     private String collectionName;
 
     @Bean(name = "mongoDatabase")
