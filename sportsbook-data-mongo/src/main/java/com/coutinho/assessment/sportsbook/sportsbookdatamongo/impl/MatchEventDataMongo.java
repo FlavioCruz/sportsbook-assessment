@@ -4,8 +4,10 @@ import com.coutinho.assessment.sportsbook.sportsbookdatamongo.MatchEventDataSour
 import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.mongodb.client.model.Filters.eq;
 
@@ -19,23 +21,24 @@ public class MatchEventDataMongo implements MatchEventDataSource {
     }
 
     @Override
-    public Mono<MatchEvent> getEventByName(String entityId) {
-        return template.findById(entityId, MatchEvent.class);
+    public CompletableFuture<MatchEvent> getEventByName(String entityId) {
+        Mono<MatchEvent> matchResult = template.findById(entityId, MatchEvent.class);
+        return matchResult.toFuture();
     }
 
     @Override
-    public Flux<MatchEvent> listMatches() {
-        return template.findAll(MatchEvent.class);
+    public CompletableFuture<List<MatchEvent>> listMatches() {
+        return template.findAll(MatchEvent.class).collectList().toFuture();
     }
 
     @Override
-    public Mono<MatchEvent> createOrUpdateOne(MatchEvent matchEvent) {
+    public CompletableFuture<MatchEvent> createOrUpdateOne(MatchEvent matchEvent) {
         MatchEvent currEvent = template.findById(matchEvent.getId(), MatchEvent.class)
                 .blockOptional().orElse(null);
 
         if(currEvent == null || currEvent.getRequestReceived().isBefore(matchEvent.getRequestReceived())){
-            return template.save(Mono.just(matchEvent));
+            return template.save(Mono.just(matchEvent)).toFuture();
         }
-        return Mono.just(currEvent);
+        return CompletableFuture.completedFuture(currEvent);
     }
 }

@@ -9,10 +9,10 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import java.time.Instant;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class MatchScoreControllerTest {
@@ -30,8 +30,10 @@ public class MatchScoreControllerTest {
     @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "randomData")
     public void testCreateEvent(MatchEventDTO matchEventDTO, String expected) throws ExecutionException, InterruptedException {
 
+        CompletableFuture<MatchEventDTO> future = CompletableFuture.completedFuture(matchEventDTO);
+
         synchronized (service) {
-            Mockito.when(this.service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(matchEventDTO);
+            Mockito.when(this.service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(future);
 
             assertNotNull(this.controller.insertEvent(new MatchEventDTO()).get());
         }

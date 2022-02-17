@@ -2,18 +2,21 @@ package com.coutinho.assessment.sportsbook.sportsbookservices.service.impl;
 
 import com.coutinho.assessment.sportsbook.sportsbookdatamongo.MatchEventDataSource;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
-import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.mapper.MatchScoreMapper;
 import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
-
+import javax.management.InstanceNotFoundException;
 import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletableFuture;
+
+import static com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.mapper.MatchScoreMapper.INSTANCE;
 
 @Service
 public class MatchScoreServiceImpl implements MatchScoreService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(MatchScoreServiceImpl.class);
 
     private final MatchEventDataSource dataSource;
 
@@ -22,29 +25,19 @@ public class MatchScoreServiceImpl implements MatchScoreService {
     }
 
     @Override
-    public MatchEventDTO getEventByName(String eventName) {
-        MatchEvent resultEntity = dataSource.getEventByName(eventName).blockOptional().orElseThrow();
-        return MatchScoreMapper.INSTANCE.entityToDto(resultEntity);
+    public CompletableFuture<MatchEventDTO> getEventByName(String eventName) {
+        return dataSource.getEventByName(eventName)
+                .thenApply(INSTANCE::entityToDto);
     }
 
     @Override
-    public MatchEventDTO createOrUpdateEvent(MatchEventDTO dto, Instant requestReceived) {
-
-        MatchEvent matchEvent = MatchScoreMapper.INSTANCE.dtoToEntity(dto);
+    public CompletableFuture<MatchEventDTO> createOrUpdateEvent(MatchEventDTO dto, Instant requestReceived) {
+        MatchEvent matchEvent = INSTANCE.dtoToEntity(dto);
+        LOGGER.info("saving entity {}", matchEvent);
         matchEvent.setRequestReceived(requestReceived);
-        MatchEvent insertResult = dataSource.createOrUpdateOne(matchEvent).blockOptional().orElseThrow();
-        return MatchScoreMapper.INSTANCE.entityToDto(insertResult);
-    }
 
-    @Override
-    public List<MatchEventDTO> listEvents() {
-        Flux<MatchEvent> eventFlux = dataSource.listMatches();
-        List<MatchEvent> listEntity = eventFlux
-                .collectList()
-                .blockOptional()
-                .orElse(null);
-
-        assert listEntity != null;
-        return listEntity.stream().map(MatchScoreMapper.INSTANCE::entityToDto).collect(Collectors.toList());
+        CompletableFuture<MatchEvent> result = dataSource.createOrUpdateOne(matchEvent);
+        LOGGER.info("entity saved {}", result);
+        return result.thenApply(INSTANCE::entityToDto);
     }
 }

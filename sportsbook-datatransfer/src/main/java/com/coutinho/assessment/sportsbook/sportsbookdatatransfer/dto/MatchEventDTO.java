@@ -38,4 +38,12 @@ public class MatchEventDTO {
     public int hashCode() {
         return Objects.hash(event);
     }
+
+    @Override
+    public String toString() {
+        return "MatchEventDTO{" +
+                "event='" + event + '\'' +
+                ", score='" + score + '\'' +
+                '}';
+    }
 }
