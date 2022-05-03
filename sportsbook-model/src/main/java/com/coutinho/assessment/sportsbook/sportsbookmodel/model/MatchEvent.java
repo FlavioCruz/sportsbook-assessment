@@ -1,14 +1,16 @@
 package com.coutinho.assessment.sportsbook.sportsbookmodel.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Instant;
 import java.util.Objects;
 
-@Document
+@Document(collection = "match")
 @JsonPOJOBuilder
+@JsonSerialize
 public class MatchEvent {
 
     @Id
@@ -16,6 +18,14 @@ public class MatchEvent {
     private String score;
     private Instant requestReceived;
 
+    public MatchEvent() {
+    }
+
+    private MatchEvent(Builder builder) {
+        this.id = builder.id;
+        this.score = builder.score;
+        this.requestReceived = builder.requestReceived;
+    }
 
     public String getId() {
         return id;
@@ -61,5 +71,30 @@ public class MatchEvent {
                 ", score='" + score + '\'' +
                 ", requestReceived=" + requestReceived +
                 '}';
+    }
+
+    public static class Builder{
+        private String id;
+        private String score;
+        private Instant requestReceived;
+
+        public Builder withId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withScore(String score) {
+            this.score = score;
+            return this;
+        }
+
+        public Builder withRequestReceived(Instant requestReceived) {
+            this.requestReceived = requestReceived;
+            return this;
+        }
+
+        public MatchEvent build(){
+            return new MatchEvent(this);
+        }
     }
 }

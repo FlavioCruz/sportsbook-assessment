@@ -1,7 +1,9 @@
 package com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto;
 
+import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
+import java.time.Instant;
 import java.util.Objects;
 
 @JsonPOJOBuilder
@@ -9,6 +11,14 @@ public class MatchEventDTO {
 
     private String event;
     private String score;
+
+    public MatchEventDTO() {
+    }
+
+    private MatchEventDTO(Builder builder) {
+        this.event = builder.event;
+        this.score = builder.score;
+    }
 
     public String getEvent() {
         return event;
@@ -45,5 +55,24 @@ public class MatchEventDTO {
                 "event='" + event + '\'' +
                 ", score='" + score + '\'' +
                 '}';
+    }
+
+    public static class Builder{
+        private String event;
+        private String score;
+
+        public MatchEventDTO.Builder withEvent(String event) {
+            this.event = event;
+            return this;
+        }
+
+        public MatchEventDTO.Builder withScore(String score) {
+            this.score = score;
+            return this;
+        }
+
+        public MatchEventDTO build(){
+            return new MatchEventDTO(this);
+        }
     }
 }

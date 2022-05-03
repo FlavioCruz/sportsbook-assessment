@@ -3,11 +3,8 @@ package com.coutinho.assessment.sportsbook.sportsbookcontroller.resources;
 import com.coutinho.assessment.sportsbook.sportsbookcontroller.controller.MatchScoreController;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
 import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -19,7 +16,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 public class MatchScoreControllerTest {
 
@@ -33,7 +29,7 @@ public class MatchScoreControllerTest {
         victim = new MatchScoreController(service);
     }
 
-    @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "getEventData")
+    @Test(invocationCount = 64, threadPoolSize = 4, dataProvider = "getEventData")
     public void testCreateEvent(CompletableFuture<MatchEventDTO> expected, String param) throws ExecutionException, InterruptedException {
         when(service.getEventByName(anyString())).thenReturn(expected);
         victim.getEvent(param);
@@ -42,7 +38,7 @@ public class MatchScoreControllerTest {
         assertEquals(expected.get().getEvent(), param);
     }
 
-    @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "createOrUpdateEventData")
+    @Test(invocationCount = 64, threadPoolSize = 4, dataProvider = "createOrUpdateEventData")
     public void testUpdateEvent(CompletableFuture<MatchEventDTO> expected, MatchEventDTO param) throws ExecutionException, InterruptedException {
         when(service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(expected);
         victim.insertEvent(param);
@@ -155,10 +151,9 @@ public class MatchScoreControllerTest {
     }
 
     private MatchEventDTO generateMatchEventsDto(String eventName, String eventScore){
-        MatchEventDTO dto = new MatchEventDTO();
-        dto.setEvent(eventName);
-        dto.setScore(eventScore);
-
-        return dto;
+        return new MatchEventDTO.Builder()
+                .withEvent(eventName)
+                .withScore(eventScore)
+                .build();
     }
 }

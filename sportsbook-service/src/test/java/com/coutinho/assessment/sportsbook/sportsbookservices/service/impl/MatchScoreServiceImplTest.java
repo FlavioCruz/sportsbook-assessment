@@ -7,7 +7,6 @@ import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreS
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
 
 public class MatchScoreServiceImplTest {
 
@@ -26,13 +25,16 @@ public class MatchScoreServiceImplTest {
     @InjectMocks
     private MatchScoreService victim;
 
+    private Instant requestReceivedTime;
+
     @BeforeClass
     public void setUp(){
         dataSourceMock = mock(MatchEventDataSource.class);
+        requestReceivedTime = Instant.now();
         victim = new MatchScoreServiceImpl(dataSourceMock);
     }
 
-    @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "getMatchData")
+    @Test(invocationCount = 1, threadPoolSize = 8, dataProvider = "getMatchData")
     public void testGetEventByName_WithSuccess(CompletableFuture<MatchEvent> result, MatchEventDTO expected)
             throws ExecutionException, InterruptedException {
         when(dataSourceMock.getEventByName(anyString())).thenReturn(result);
@@ -42,19 +44,19 @@ public class MatchScoreServiceImplTest {
         assertEquals(serviceReturn.get(), expected);
     }
 
-    @Test(invocationCount = 64, threadPoolSize = 8, dataProvider = "getMatchData")
+    @Test(invocationCount = 1, threadPoolSize = 8, dataProvider = "getMatchData")
     public void testCreateOrUpdateEvent(CompletableFuture<MatchEvent> result, MatchEventDTO expected)
             throws ExecutionException, InterruptedException {
         when(dataSourceMock.createOrUpdateOne(any(MatchEvent.class))).thenReturn(result);
         Instant creationInstant = Instant.now();
         CompletableFuture<MatchEventDTO> serviceReturn = victim.createOrUpdateEvent(generateMatchEventsDto(expected.getEvent(), expected.getScore()), creationInstant);
 
-        verify(dataSourceMock, atLeast(1)).createOrUpdateOne(generateMatchEventsEntity(expected.getEvent(), expected.getScore()));
+        verify(dataSourceMock, atLeast(1)).createOrUpdateOne(result.get());
         assertEquals(serviceReturn.get(), expected);
     }
 
 
-    @DataProvider(name = "getMatchData")
+    @DataProvider(parallel = true, name = "getMatchData")
     private Object[][] futureMatchEventProvider(){
         return new Object[][]{
                 {
@@ -106,18 +108,17 @@ public class MatchScoreServiceImplTest {
     }
 
     private MatchEventDTO generateMatchEventsDto(String eventName, String eventScore){
-        MatchEventDTO dto = new MatchEventDTO();
-        dto.setEvent(eventName);
-        dto.setScore(eventScore);
-
-        return dto;
+        return new MatchEventDTO.Builder()
+                .withEvent(eventName)
+                .withScore(eventScore)
+                .build();
     }
 
     private MatchEvent generateMatchEventsEntity(String eventName, String eventScore){
-        MatchEvent entity = new MatchEvent();
-        entity.setId(eventName);
-        entity.setScore(eventScore);
-
-        return entity;
+        return new MatchEvent.Builder()
+                .withId(eventName)
+                .withScore(eventScore)
+                .withRequestReceived(requestReceivedTime)
+                .build();
     }
 }
