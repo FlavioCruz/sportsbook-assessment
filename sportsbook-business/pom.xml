@@ -9,41 +9,36 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sportsbook-service</artifactId>
+    <artifactId>sportsbook-business</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-data-mongo</artifactId>
+            <artifactId>sportsbook-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-model</artifactId>
+            <artifactId>sportsbook-data-kafka</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.coutinho.assessment</groupId>
+            <artifactId>sportsbook-service</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.coutinho.assessment</groupId>
+            <artifactId>sportsbook-datatransfer</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                    <mainClass>com.coutinho.assessment.sportsbook.sportsbookcontroller.resources.SportsbookApplication</mainClass>
-                </configuration>
-            </plugin>
-
-        </plugins>
-    </build>
-
 
 </project>

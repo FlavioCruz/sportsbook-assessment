@@ -1,12 +1,12 @@
 package com.coutinho.assessment.sportsbook.sportsbookservices.service;
 
-import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
+import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 
 public interface MatchScoreService {
 
-    CompletableFuture<MatchEventDTO> getEventByName(String eventName);
-    CompletableFuture<MatchEventDTO> createOrUpdateEvent(MatchEventDTO dto, Instant requestReceived);
+    CompletableFuture<MatchEvent> getEventByName(String eventName);
+    CompletableFuture<MatchEvent> createOrUpdateEvent(MatchEvent entity, Instant requestReceived);
 }

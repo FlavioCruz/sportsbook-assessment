@@ -42,7 +42,7 @@ class KafkaServiceTest {
         admin = Admin.create(properties);
         kafkaTopicConfig = mock(KafkaTopicConfig.class);
         when(kafkaTopicConfig.kafkaAdmin()).thenReturn(kafkaAdmin());
-        victim = new KafkaServiceImpl(kafkaTemplate(), kafkaTopicConfig);
+        victim = new KafkaServiceImpl(kafkaTemplate());
     }
 
     @Test
@@ -57,9 +57,7 @@ class KafkaServiceTest {
         victim.sendMatchEvent(
             "mytopic",
                 new MatchEvent.Builder().withId("Game 1").withScore("Score 1").build()
-        );
-
-
+        ).completable().join();
     }
 
     private ProducerFactory<String, String> producerFactory() {

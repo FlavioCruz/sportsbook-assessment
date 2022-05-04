@@ -1,0 +1,8 @@
+version: '2'
+services:
+  sportsbook:
+    container_name: sportsbook
+    build: .
+    image: sportsbook:latest
+    ports:
+      - 8080:8080

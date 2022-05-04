@@ -2,7 +2,9 @@ package com.coutinho.assessment.sportsbook.sportsbookcontroller.resources;
 
 import com.coutinho.assessment.sportsbook.sportsbookcontroller.controller.MatchScoreController;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
+import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
+import com.coutinho.assessments.sportsbookbusiness.service.MatchEventBusiness;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -20,30 +22,30 @@ import static org.testng.Assert.assertEquals;
 public class MatchScoreControllerTest {
 
     @Mock
-    private MatchScoreService service;
+    private MatchEventBusiness service;
     private MatchScoreController victim;
 
     @BeforeClass
     public void setup(){
-        service = mock(MatchScoreService.class);
+        service = mock(MatchEventBusiness.class);
         victim = new MatchScoreController(service);
     }
 
     @Test(invocationCount = 64, threadPoolSize = 4, dataProvider = "getEventData")
     public void testCreateEvent(CompletableFuture<MatchEventDTO> expected, String param) throws ExecutionException, InterruptedException {
-        when(service.getEventByName(anyString())).thenReturn(expected);
+        when(service.getEvent(anyString())).thenReturn(expected);
         victim.getEvent(param);
 
-        verify(service, atLeast(1)).getEventByName(param);
+        verify(service, atLeast(1)).getEvent(param);
         assertEquals(expected.get().getEvent(), param);
     }
 
     @Test(invocationCount = 64, threadPoolSize = 4, dataProvider = "createOrUpdateEventData")
     public void testUpdateEvent(CompletableFuture<MatchEventDTO> expected, MatchEventDTO param) throws ExecutionException, InterruptedException {
-        when(service.createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(expected);
+        when(service.insertEvent(any(MatchEventDTO.class), any(Instant.class))).thenReturn(expected);
         victim.insertEvent(param);
 
-        verify(service, atLeast(1)).createOrUpdateEvent(any(MatchEventDTO.class), any(Instant.class));
+        verify(service, atLeast(1)).insertEvent(any(MatchEventDTO.class), any(Instant.class));
         assertEquals(expected.get(), param);
     }
 

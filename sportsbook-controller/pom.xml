@@ -19,13 +19,13 @@
     <dependencies>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-service</artifactId>
+            <artifactId>sportsbook-datatransfer</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.coutinho.assessment</groupId>
-            <artifactId>sportsbook-datatransfer</artifactId>
+            <artifactId>sportsbook-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

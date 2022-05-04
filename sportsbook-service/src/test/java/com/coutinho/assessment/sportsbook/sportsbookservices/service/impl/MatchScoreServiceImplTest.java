@@ -1,7 +1,6 @@
 package com.coutinho.assessment.sportsbook.sportsbookservices.service.impl;
 
 import com.coutinho.assessment.sportsbook.sportsbookdatamongo.MatchEventDataSource;
-import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
 import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
 import org.mockito.InjectMocks;
@@ -35,21 +34,21 @@ public class MatchScoreServiceImplTest {
     }
 
     @Test(invocationCount = 1, threadPoolSize = 8, dataProvider = "getMatchData")
-    public void testGetEventByName_WithSuccess(CompletableFuture<MatchEvent> result, MatchEventDTO expected)
+    public void testGetEventByName_WithSuccess(CompletableFuture<MatchEvent> result, MatchEvent expected)
             throws ExecutionException, InterruptedException {
         when(dataSourceMock.getEventByName(anyString())).thenReturn(result);
-        CompletableFuture<MatchEventDTO> serviceReturn = victim.getEventByName(expected.getEvent());
+        CompletableFuture<MatchEvent> serviceReturn = victim.getEventByName(expected.getId());
 
-        verify(dataSourceMock, atLeast(1)).getEventByName(expected.getEvent());
+        verify(dataSourceMock, atLeast(1)).getEventByName(expected.getId());
         assertEquals(serviceReturn.get(), expected);
     }
 
     @Test(invocationCount = 1, threadPoolSize = 8, dataProvider = "getMatchData")
-    public void testCreateOrUpdateEvent(CompletableFuture<MatchEvent> result, MatchEventDTO expected)
+    public void testCreateOrUpdateEvent(CompletableFuture<MatchEvent> result, MatchEvent expected)
             throws ExecutionException, InterruptedException {
         when(dataSourceMock.createOrUpdateOne(any(MatchEvent.class))).thenReturn(result);
         Instant creationInstant = Instant.now();
-        CompletableFuture<MatchEventDTO> serviceReturn = victim.createOrUpdateEvent(generateMatchEventsDto(expected.getEvent(), expected.getScore()), creationInstant);
+        CompletableFuture<MatchEvent> serviceReturn = victim.createOrUpdateEvent(generateMatchEventsEntity(expected.getId(), expected.getScore()), creationInstant);
 
         verify(dataSourceMock, atLeast(1)).createOrUpdateOne(result.get());
         assertEquals(serviceReturn.get(), expected);
@@ -62,56 +61,49 @@ public class MatchScoreServiceImplTest {
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 0")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 0")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 0")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 3")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 3")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 3")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 2")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 2")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 2")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 5")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 5")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 5")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 1")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 1")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 1")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 7")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 7")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 7")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 1")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "0 - 1")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "0 - 1")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "1 - 0")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "1 - 0")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "1 - 0")
                 },
                 {
                     CompletableFuture.completedFuture(
                             generateMatchEventsEntity("Flamengo vs Fluminense", "1 - 7")),
-                        generateMatchEventsDto("Flamengo vs Fluminense", "1 - 7")
+                        generateMatchEventsEntity("Flamengo vs Fluminense", "1 - 7")
                 }
         };
-    }
-
-    private MatchEventDTO generateMatchEventsDto(String eventName, String eventScore){
-        return new MatchEventDTO.Builder()
-                .withEvent(eventName)
-                .withScore(eventScore)
-                .build();
     }
 
     private MatchEvent generateMatchEventsEntity(String eventName, String eventScore){
