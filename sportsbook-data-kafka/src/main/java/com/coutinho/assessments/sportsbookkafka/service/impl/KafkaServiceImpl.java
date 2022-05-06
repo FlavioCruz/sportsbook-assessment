@@ -2,8 +2,6 @@ package com.coutinho.assessments.sportsbookkafka.service.impl;
 
 import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
 import com.coutinho.assessments.sportsbookkafka.service.KafkaService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;

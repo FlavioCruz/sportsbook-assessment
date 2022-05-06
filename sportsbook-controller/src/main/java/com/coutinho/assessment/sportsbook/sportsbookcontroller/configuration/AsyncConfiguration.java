@@ -10,15 +10,12 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.util.concurrent.Executor;
-import java.util.logging.Logger;
 
 @EnableAsync
 @Configuration
 @PropertySource("classpath:application.properties")
 @ManagedResource
 public class AsyncConfiguration {
-
-    private final Logger LOGGER = Logger.getLogger(AsyncConfiguration.class.getName());
 
     @Value("${async.pool.coreSize}")
     private Integer corePoolSize;
@@ -30,14 +27,12 @@ public class AsyncConfiguration {
 
     @Bean(name = "asyncExecutor")
     public Executor asyncExecutor() {
-        LOGGER.info("operation: asyncExecutor, status: creating executor bean");
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(queueCapacity);
         executor.setThreadNamePrefix("AsynchThread-");
         executor.initialize();
-        LOGGER.info("operation: asyncExecutor, status: executor created");
         return executor;
     }
 

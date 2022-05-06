@@ -1,4 +1,4 @@
-package com.coutinho.assessments.sportsbookbusiness.service;
+package com.coutinho.assessment.sportsbook.sportsbookbusiness.service;
 
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
 

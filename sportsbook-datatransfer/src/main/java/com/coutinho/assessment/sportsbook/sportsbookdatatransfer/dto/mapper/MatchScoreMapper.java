@@ -6,10 +6,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface MatchScoreMapper {
-
-    MatchScoreMapper INSTANCE = Mappers.getMapper(MatchScoreMapper.class);
 
     @Mapping(target = "id", source = "event")
     MatchEvent dtoToEntity(MatchEventDTO dto);

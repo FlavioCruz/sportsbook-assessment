@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:11
 MAINTAINER flaviocoutinho
 ARG JAR_FILE=target/**.jar
 COPY ${JAR_FILE} app.jar

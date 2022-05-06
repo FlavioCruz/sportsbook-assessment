@@ -11,7 +11,6 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class MatchScoreServiceImpl implements MatchScoreService {
 
-    //private final Logger LOGGER = LoggerFactory.getLogger(MatchScoreServiceImpl.class);
 
     private final MatchEventDataSource dataSource;
 

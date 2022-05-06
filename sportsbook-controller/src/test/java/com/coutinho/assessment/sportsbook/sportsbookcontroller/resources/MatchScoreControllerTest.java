@@ -2,9 +2,7 @@ package com.coutinho.assessment.sportsbook.sportsbookcontroller.resources;
 
 import com.coutinho.assessment.sportsbook.sportsbookcontroller.controller.MatchScoreController;
 import com.coutinho.assessment.sportsbook.sportsbookdatatransfer.dto.MatchEventDTO;
-import com.coutinho.assessment.sportsbook.sportsbookmodel.model.MatchEvent;
-import com.coutinho.assessment.sportsbook.sportsbookservices.service.MatchScoreService;
-import com.coutinho.assessments.sportsbookbusiness.service.MatchEventBusiness;
+import com.coutinho.assessment.sportsbook.sportsbookbusiness.service.MatchEventBusiness;
 import org.mockito.Mock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
